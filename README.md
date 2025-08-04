@@ -13,7 +13,7 @@ It allows users to **convert amounts instantly**, **check live exchange rates**,
 - 📝 **Accurate & Trusted:** Data sourced from genuine, reliable platforms.
 - 💡 **Full Forms of Currencies:** Easy reference for all used currency codes.
 - 📱 **Responsive Design:** Works seamlessly on mobile and desktop.
-
+- 🔷 **Logic:** Fully Client side web (FRONTEND) works with brower!
 ---
 
 ## 💡 About the Project
