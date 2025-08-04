@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="assets/favicon.png"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Murphix | Currency Tracker</title>
+  <link rel="stylesheet" href="style/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Header -->
+<header class="navbar">
+  <div class="logo">
+    <span class="logo-text">Murphix</span>
+    <span class="emoji">💹</span>
+  </div>
+  <nav class="nav-links">
+    <a href="index.html"><strong>Home</strong></a>
+    <a href="more.html"><strong>Features</strong></a>
+    <a href="about.html"><strong>About</strong></a>
+  </nav>
+</header>
+
+</head>
+<style>
+    body {
+        background: url('assets/bg.jpg') no-repeat center center/cover;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        text-align: center;
+    }
+
+</style>
+
+<body>
+  <section class="app-container">
+    <h1>Live Currency & Crypto Tracker 💹</h1>
+    <p class="subtext"><i><strong>Track real-time rates, convert currencies, and monitor top cryptos.<br><p>
+  The data displayed here is sourced from a highly reliable platform and is updated in real-time within seconds. 
+  While it is accurate and trustworthy, it should be considered as a secondary reference. 
+  For any issues, please contact the developer.</i><strong>
+ </p>
+
+  <!-- Horizontal Row -->
+  <div class="top-row">
+    <!-- Conversion Box -->
+    <div class="converter-card">
+      <h2>Currency Converter</h2>
+      <div class="converter-inputs">
+        <input type="number" placeholder="Enter amount" id="amount" />
+        <select id="from-currency">
+          <option value="USD">USD</option>
+          <option value="INR">INR</option>
+          <option value="EUR">EUR</option>
+          <option value="JPY">JPY</option>
+          <option value="GBP">GBP</option>
+          <option value="AUD">AUD</option>
+          <option value="CAD">CAD</option>
+          <option value="SGD">SGD</option>
+          <option value="AED">AED</option>
+          <option value="CNY">CNY</option>
+        </select>
+        <select id="to-currency">
+          <option value="USD">USD</option>
+          <option value="INR">INR</option>
+          <option value="EUR">EUR</option>
+          <option value="JPY">JPY</option>
+          <option value="GBP">GBP</option>
+          <option value="AUD">AUD</option>
+          <option value="CAD">CAD</option>
+          <option value="SGD">SGD</option>
+          <option value="AED">AED</option>
+          <option value="CNY">CNY</option>
+        </select>
+      </div>
+      <button class="btn-cute" onclick="convertCurrency()">Convert</button>
+      <p class="result" id="result">Result will appear here...</p>
+    </div>
+
+    <!-- Live Rates Section -->
+    <div class="live-rates">
+      <h2>Live Exchange Rates</h2>
+      <div id="rates-list" class="rates-grid"></div>
+    </div>
+  </div>
+
+  <!-- Crypto Section Full Width -->
+  <div class="crypto-section">
+    <h2>Top Cryptos</h2>
+    <div id="crypto-list" class="crypto-grid"></div>
+  </div>
+</section>
+
+
+<script>
+// Elements
+const fromCurrency = document.getElementById('from-currency');
+const toCurrency = document.getElementById('to-currency');
+const amountInput = document.getElementById('amount');
+const resultText = document.getElementById('result');
+const ratesList = document.getElementById('rates-list');
+const cryptoList = document.getElementById('crypto-list');
+
+// Convert Currency
+async function convertCurrency(defaultLoad = false) {
+  const from = fromCurrency.value;
+  const to = toCurrency.value;
+  const amount = amountInput.value || 1;
+
+  const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${from}`);
+  const data = await res.json();
+  const rate = data.rates[to];
+  const converted = (amount * rate).toFixed(2);
+
+  resultText.textContent = `${amount} ${from} = ${converted} ${to}`;
+
+
+  if (!defaultLoad) {
+    resultText.style.display = "block";
+    resultText.style.opacity = "0";
+    resultText.style.transform = "translateY(-10px)";
+    setTimeout(() => {
+      resultText.style.transition = "all 0.5s ease";
+      resultText.style.opacity = "1";
+      resultText.style.transform = "translateY(0)";
+    }, 10);
+  }
+}
+
+// Run default conversion on page load
+window.onload = () => {
+  convertCurrency(true); 
+  loadLiveRates();
+  loadCrypto();
+};
+
+// Default values
+window.addEventListener("load", async () => {
+  amountInput.value = 1; // Default amount
+  fromCurrency.value = "USD";
+  toCurrency.value = "INR";
+  await convertCurrency(true); // Run once for default
+  loadLiveRates();
+  loadCrypto();
+});
+
+async function convertCurrency(defaultLoad = false) {
+  const from = fromCurrency.value;
+  const to = toCurrency.value;
+  const amount = amountInput.value || 1;
+
+  const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${from}`);
+  const data = await res.json();
+  const rate = data.rates[to];
+  const converted = (amount * rate).toFixed(2);
+
+  resultText.textContent = `${amount} ${from} = ${converted} ${to}`;
+  resultText.style.display = "block";
+
+  // Slide-down animation
+  if (!defaultLoad) {
+    resultText.style.opacity = "0";
+    resultText.style.transform = "translateY(-15px)";
+    setTimeout(() => {
+      resultText.style.transition = "all 0.5s ease";
+      resultText.style.opacity = "1";
+      resultText.style.transform = "translateY(0)";
+    }, 50);
+  }
+}
+
+
+// Load Live Exchange Rates (USD Base)
+async function loadLiveRates() {
+  const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+  const data = await res.json();
+  const topCurrencies = ['INR', 'EUR', 'GBP', 'JPY', 'AUD', 'CNY'];
+
+  ratesList.innerHTML = '';
+  topCurrencies.forEach(cur => {
+    ratesList.innerHTML += `<div class="rate-card">
+      <strong>USD → ${cur}</strong><br>
+      ${data.rates[cur].toFixed(2)}
+    </div>`;
+  });
+}
+
+// Load Crypto Prices
+async function loadCrypto() {
+  const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&page=1&sparkline=false');
+  const data = await res.json();
+
+  cryptoList.innerHTML = '';
+  data.forEach(coin => {
+    cryptoList.innerHTML += `<div class="crypto-card">
+      <img src="${coin.image}" width="30"> ${coin.name} <br>
+      $${coin.current_price.toLocaleString()}
+    </div>`;
+  });
+}
+
+// Load on page start
+window.onload = () => {
+  loadLiveRates();
+  loadCrypto();
+};
+
+// Refresh every 30 seconds
+setInterval(() => {
+  loadLiveRates();
+  loadCrypto();
+}, 30000);
+</script>
+<script>
+  window.addEventListener("load", () => {
+    document.body.classList.add("loaded");
+  });
+</script>
+
+
+<footer class="footer">
+  <p>© 2025 <strong><i>Murphix</i>💹</strong> — Built with 💖 by <a href="https://github.com/sanketpadhyal" target="_blank">@sanketpadhyal</a></p>
+</footer>
+
+</body>
+</html>
