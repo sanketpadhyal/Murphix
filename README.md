@@ -42,9 +42,8 @@ Reach out directly: **[sanketpadhyal3@gmail.com](mailto:sanketpadhyal3@gmail.com
 
 ---
 
-## 🌟 Contribute / Suggestions
-- Star ⭐ the repo if you like it  
-- Fork and create PRs for any improvements  
+## 🌟 Contribute / Suggestions-
+- dont need because i am doing this for myself!! its my passion. ❤️‍🩹
 
 ---
 
